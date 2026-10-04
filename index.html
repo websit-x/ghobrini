@@ -9,7 +9,9 @@
            إعدادات الموقع الأصلية
            ========================================= */
         body {
-            margin: 0; padding: 0; box-sizing: border-box;
+            margin: 0; 
+            padding: 20px; /* تمت الإضافة لكي يأخذ الموقع شكل وتناسق شاشة الهاتف */
+            box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0f172a; height: 100vh;
             display: flex; justify-content: center; align-items: center;
@@ -66,7 +68,7 @@
         }
 
         /* =========================================
-           تصميم الدب (متناسق مع اللون الليلي)
+           تصميم الدب (تم تعديل اللون للأبيض الوضوح العالي)
            ========================================= */
         .bear-container {
             position: absolute; top: -100px; left: 50%;
@@ -74,27 +76,27 @@
         }
 
         .bear-head {
-            width: 130px; height: 120px; background: #334155; 
+            width: 130px; height: 120px; background: #ffffff; /* لون أبيض ساطع */
             border-radius: 50%; margin: 0 auto; position: relative;
-            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
+            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.15);
         }
 
         .ear {
             position: absolute; top: -5px; width: 45px; height: 45px;
-            background: #334155; border-radius: 50%; z-index: -1;
+            background: #ffffff; border-radius: 50%; z-index: -1; /* لون أبيض ساطع */
             transition: top 0.3s ease; 
         }
         .ear.left { left: -5px; } .ear.right { right: -5px; }
         .ear::after {
             content: ''; position: absolute; top: 50%; left: 50%;
             transform: translate(-50%, -50%); width: 22px; height: 22px;
-            background: #38bdf8; border-radius: 50%;
+            background: #e2e8f0; border-radius: 50%; /* داخل الأذن رمادي فاتح جداً */
         }
 
         .bear-face {
             position: absolute; bottom: 12px; left: 50%;
             transform: translateX(-50%); width: 75px; height: 60px;
-            background: #475569; border-radius: 40px 40px 30px 30px;
+            background: #f1f5f9; border-radius: 40px 40px 30px 30px; /* أنف أبيض مائل للرمادي لكسر اللون */
         }
 
         .nose {
@@ -128,7 +130,7 @@
 
         .paw {
             position: absolute; bottom: -25px; width: 50px; height: 50px;
-            background: #334155; border-radius: 50%;
+            background: #ffffff; border-radius: 50%; /* مخالب بيضاء */
             transition: transform 0.2s cubic-bezier(0.68, -0.2, 0.265, 1.2); 
             box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 20;
         }
@@ -136,7 +138,7 @@
 
         .pad {
             position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-            width: 25px; height: 20px; background: #475569; border-radius: 50%;
+            width: 25px; height: 20px; background: #e2e8f0; border-radius: 50%; /* باطن المخلب رمادي فاتح */
         }
 
         .claws {
